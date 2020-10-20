@@ -431,7 +431,7 @@ export default class Autowhatever extends Component {
     });
 
     return (
-      <div {...containerProps}>
+      <div aria-controls={itemsContainerId} {...containerProps}>
         {inputComponent}
         {itemsContainer}
       </div>
