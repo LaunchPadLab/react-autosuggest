@@ -388,7 +388,7 @@ export default class Autowhatever extends Component {
     const containerProps = {
       role: 'combobox',
       'aria-haspopup': 'listbox',
-      'aria-owns': itemsContainerId,
+      'aria-controls': itemsContainerId,
       'aria-expanded': isOpen,
       ...theme(
         `react-autowhatever-${id}-container`,
@@ -431,7 +431,7 @@ export default class Autowhatever extends Component {
     });
 
     return (
-      <div aria-controls={itemsContainerId} {...containerProps}>
+      <div {...containerProps}>
         {inputComponent}
         {itemsContainer}
       </div>
