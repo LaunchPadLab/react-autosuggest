@@ -1,21 +1,22 @@
 var path = require('path');
 
 module.exports = {
-  entry: [
-    './demo/standalone/app'
-  ],
+  entry: ['./demo/standalone/app'],
+  mode: 'production',
 
   output: {
     filename: './demo/standalone/compiled.app.js'
   },
 
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loader: 'babel',
-      include: [
-        path.join(__dirname, 'demo', 'standalone') // Must be an absolute path
-      ]
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [
+          path.join(__dirname, 'demo', 'standalone') // Must be an absolute path
+        ]
+      }
+    ]
   }
 };

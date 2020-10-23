@@ -1,37 +1,38 @@
 import styles from './Header.less';
 
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import fetch from 'isomorphic-fetch';
 import Link from 'Link/Link';
 import GitHub from 'GitHub/GitHub';
-import { loadStargazers } from './redux';
 
-function mapStateToProps({ header }) {
-  return {
-    stargazers: header.stargazers
-  };
-}
+export default class Header extends Component {
+  constructor() {
+    super();
 
-class Header extends Component {
-  static propTypes = {
-    stargazers: PropTypes.string.isRequired,
-
-    loadStargazers: PropTypes.func.isRequired
-  };
+    this.state = {
+      stargazers: '3754'
+    };
+  }
 
   componentDidMount() {
-    this.props.loadStargazers();
+    fetch('https://api.github.com/repos/moroshko/react-autosuggest')
+      .then(response => response.json())
+      .then(response => {
+        if (response.stargazers_count) {
+          this.setState({
+            stargazers: String(response.stargazers_count)
+          });
+        }
+      });
   }
 
   render() {
-    const { stargazers } = this.props;
+    const { stargazers } = this.state;
 
     return (
       <div className={styles.container}>
         <div className={styles.logo} />
-        <h1 className={styles.header}>
-          React Autosuggest
-        </h1>
+        <h1 className={styles.header}>React Autosuggest</h1>
         <div className={styles.subHeader}>
           WAI-ARIA compliant autosuggest component built in React
         </div>
@@ -39,20 +40,23 @@ class Header extends Component {
           className={styles.button}
           href="https://github.com/moroshko/react-autosuggest#installation"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           Get started
         </a>
         <div className={styles.socialLinks}>
           <Link
             className={styles.stargazersLink}
             href="https://github.com/moroshko/react-autosuggest/stargazers"
-            underline={false}>
+            underline={false}
+          >
             {stargazers} stargazers
           </Link>
           <Link
             className={styles.twitterLink}
             href="https://twitter.com/moroshko"
-            underline={false}>
+            underline={false}
+          >
             @moroshko
           </Link>
         </div>
@@ -61,5 +65,3 @@ class Header extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, { loadStargazers })(Header);

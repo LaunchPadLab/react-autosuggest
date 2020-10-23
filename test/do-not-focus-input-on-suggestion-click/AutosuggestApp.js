@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import sinon from 'sinon';
-import Autosuggest from '../../src/AutosuggestContainer';
+import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
-function getMatchingLanguages(value) {
+const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
 let app = null;
 
@@ -18,9 +18,7 @@ export const getSuggestionValue = sinon.spy(suggestion => {
 });
 
 export const renderSuggestion = sinon.spy(suggestion => {
-  return (
-    <span>{suggestion.name}</span>
-  );
+  return <span>{suggestion.name}</span>;
 });
 
 export const onChange = sinon.spy((event, { newValue }) => {
@@ -74,7 +72,8 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         onSuggestionSelected={onSuggestionSelected}
-        focusInputOnSuggestionClick={false} />
+        focusInputOnSuggestionClick={false}
+      />
     );
   }
 }

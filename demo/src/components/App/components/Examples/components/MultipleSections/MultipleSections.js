@@ -4,13 +4,13 @@ import theme from './theme.less';
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -23,31 +23,21 @@ function getSuggestions(value) {
     .map(section => {
       return {
         title: section.title,
-        languages: section.languages.filter(language => regex.test(language.name))
+        languages: section.languages.filter(language =>
+          regex.test(language.name)
+        )
       };
     })
     .filter(section => section.languages.length > 0);
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
-function renderSectionTitle(section) {
-  return (
-    <strong>{section.title}</strong>
-  );
-}
+const renderSectionTitle = section => <strong>{section.title}</strong>;
 
-function getSectionSuggestions(section) {
-  return section.languages;
-}
+const getSectionSuggestions = section => section.languages;
 
 export default class MultipleSections extends Component {
   constructor() {
@@ -80,7 +70,7 @@ export default class MultipleSections extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };
@@ -88,16 +78,16 @@ export default class MultipleSections extends Component {
     return (
       <div id="multiple-sections-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Multiple sections
-          </div>
+          <div className={styles.title}>Multiple sections</div>
           <div className={styles.description}>
-            Suggestions can also be presented in multiple sections.
+            Suggestions can also be presented in multiple sections. Note that we
+            highlight the first suggestion by default here.
           </div>
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/qbRNjV"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -112,9 +102,11 @@ export default class MultipleSections extends Component {
             renderSectionTitle={renderSectionTitle}
             getSectionSuggestions={getSectionSuggestions}
             inputProps={inputProps}
+            highlightFirstSuggestion={true}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
-            id="multiple-sections-example" />
+            id="multiple-sections-example"
+          />
         </div>
       </div>
     );

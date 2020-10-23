@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import {
   init,
   tick,
@@ -24,7 +24,7 @@ describe('Autosuggest that gets suggestions asynchronously', () => {
     });
 
     it('should show suggestions when they arrive', () => {
-      expectSuggestions(['Java', 'Javascript']);
+      expectSuggestions(['Java', 'JavaScript']);
     });
 
     it('should not show previous suggestions when revealing suggestions', () => {
@@ -57,6 +57,13 @@ describe('Autosuggest that gets suggestions asynchronously', () => {
       clickDown();
       clickEnter();
       tick(500);
+      expectSuggestions([]);
+    });
+
+    it('should not error if suggestions were cleared after having suggestions', () => {
+      focusAndSetInputValue('pz');
+      tick(100);
+      clickEnter();
       expectSuggestions([]);
     });
   });

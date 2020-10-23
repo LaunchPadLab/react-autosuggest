@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import sinon from 'sinon';
-import Autosuggest from '../../src/AutosuggestContainer';
+import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
-function getMatchingLanguages(value) {
+const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -14,7 +14,7 @@ function getMatchingLanguages(value) {
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
 let app = null;
 
@@ -74,7 +74,9 @@ export default class AutosuggestApp extends Component {
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputProps={inputProps} />
+        inputProps={inputProps}
+        highlightFirstSuggestion={true}
+      />
     );
   }
 }

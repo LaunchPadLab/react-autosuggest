@@ -3,13 +3,13 @@ import styles from './Basic.less';
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -19,17 +19,11 @@ function getSuggestions(value) {
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
 export default class Basic extends Component {
   constructor() {
@@ -62,7 +56,7 @@ export default class Basic extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };
@@ -70,16 +64,15 @@ export default class Basic extends Component {
     return (
       <div id="basic-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Basic
-          </div>
+          <div className={styles.title}>Basic</div>
           <div className={styles.description}>
             Let’s start simple. Here’s a plain list of suggestions.
           </div>
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/LGNJMy"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -92,7 +85,8 @@ export default class Basic extends Component {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-            id="basic-example" />
+            id="basic-example"
+          />
         </div>
       </div>
     );

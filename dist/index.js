@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./AutosuggestContainer').default;
+module.exports = require('./Autosuggest')["default"];

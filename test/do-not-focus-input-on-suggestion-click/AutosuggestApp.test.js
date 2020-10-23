@@ -1,12 +1,13 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import { expect } from 'chai';
 import {
   init,
   syntheticEventMatcher,
   clickSuggestion,
   focusAndSetInputValue,
-  isInputFocused
+  isInputFocused,
+  mouseUpDocument
 } from '../helpers';
 import AutosuggestApp, {
   onBlur,
@@ -21,8 +22,8 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
   describe('when suggestion is clicked', () => {
     beforeEach(() => {
       focusAndSetInputValue('p');
-      onBlur.reset();
-      onSuggestionsClearRequested.reset();
+      onBlur.resetHistory();
+      onSuggestionsClearRequested.resetHistory();
       clickSuggestion(1);
     });
 
@@ -33,12 +34,17 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
     it('should call onBlur once with the right parameters', () => {
       expect(onBlur).to.have.been.calledOnce;
       expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        focusedSuggestion: { name: 'PHP', year: 1995 }
+        highlightedSuggestion: { name: 'PHP', year: 1995 }
       });
     });
 
     it('should call onSuggestionsClearRequested once', () => {
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
+    });
+
+    it('should not focus input on document mouse up', () => {
+      mouseUpDocument();
+      expect(isInputFocused()).to.equal(false);
     });
   });
 });

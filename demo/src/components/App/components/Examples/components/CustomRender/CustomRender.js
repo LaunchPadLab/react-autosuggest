@@ -3,15 +3,16 @@ import theme from './theme.less';
 
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
-import highlight  from 'autosuggest-highlight';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import people from './people';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -21,33 +22,32 @@ function getSuggestions(value) {
   const regex = new RegExp('\\b' + escapedValue, 'i');
 
   return people.filter(person => regex.test(getSuggestionValue(person)));
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return `${suggestion.first} ${suggestion.last}`;
-}
+const getSuggestionValue = suggestion =>
+  `${suggestion.first} ${suggestion.last}`;
 
-function renderSuggestion(suggestion, { query }) {
+const renderSuggestion = (suggestion, { query }) => {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
-  const matches = highlight.match(suggestionText, query);
-  const parts = highlight.parse(suggestionText, matches);
+  const matches = match(suggestionText, query);
+  const parts = parse(suggestionText, matches);
 
   return (
     <span className={theme.suggestionContent + ' ' + theme[suggestion.twitter]}>
       <span className={theme.name}>
-        {
-          parts.map((part, index) => {
-            const className = part.highlight ? theme.highlight : null;
+        {parts.map((part, index) => {
+          const className = part.highlight ? theme.highlight : null;
 
-            return (
-              <span className={className} key={index}>{part.text}</span>
-            );
-          })
-        }
+          return (
+            <span className={className} key={index}>
+              {part.text}
+            </span>
+          );
+        })}
       </span>
     </span>
   );
-}
+};
 
 export default class CustomRender extends Component {
   constructor() {
@@ -84,7 +84,7 @@ export default class CustomRender extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };
@@ -92,17 +92,17 @@ export default class CustomRender extends Component {
     return (
       <div id="custom-render-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Custom render
-          </div>
+          <div className={styles.title}>Custom render</div>
           <div className={styles.description}>
-            Apply any styling you wish.<br />
+            Apply any styling you wish.
+            <br />
             For example, render images and highlight the matching string.
           </div>
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/PZWbzK"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -116,7 +116,8 @@ export default class CustomRender extends Component {
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
-            id="custom-render-example" />
+            id="custom-render-example"
+          />
         </div>
       </div>
     );
